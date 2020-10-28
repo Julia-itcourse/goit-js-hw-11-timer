@@ -1,8 +1,7 @@
 import css from "./css/style.css";
 
 class CountdownTimer {
-  constructor(selector, targetDate) {
-    console.log("creating timer instance");
+  constructor({ selector, targetDate }) {
     this.targetDate = targetDate;
     this.sec = document.querySelector(`${selector} [data-value="secs"]`);
     this.min = document.querySelector(`${selector} [data-value="mins"]`);
@@ -11,12 +10,20 @@ class CountdownTimer {
   }
 
   start() {
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       const currentTime = Date.now();
       const delta = this.targetDate - currentTime;
-
-      this.updateTime(delta);
+      if (delta > 0) {
+        this.updateTime(delta);
+      } else {
+        console.log("delta is < 0");
+        this.stop();
+      }
     }, 1000);
+  }
+
+  stop() {
+    clearInterval(this.intervalId);
   }
 
   updateTime(time) {
@@ -41,5 +48,8 @@ class CountdownTimer {
   }
 }
 
-const timer = new CountdownTimer("#timer-1", new Date("Dec 31, 2020"));
+const timer = new CountdownTimer({
+  selector: "#timer-1",
+  targetDate: new Date("Dec 31, 2020"),
+});
 timer.start();
