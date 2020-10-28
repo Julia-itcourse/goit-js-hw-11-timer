@@ -1,45 +1,44 @@
 import css from "./css/style.css";
 
-const refs = {
-  sec: document.querySelector('[data-value="secs"]'),
-  min: document.querySelector('[data-value="mins"]'),
-  hour: document.querySelector('[data-value="hours"]'),
-  day: document.querySelector('[data-value="days"]'),
-};
+class CountdownTimer {
+  constructor(selector, targetDate) {
+    this.targetDate = targetDate;
+    this.sec = document.querySelector(`${selector} [data-value="secs"]`);
+    this.min = document.querySelector(`${selector} [data-value="mins"]`);
+    this.hour = document.querySelector(`${selector} [data-value="hours"]`);
+    this.day = document.querySelector(`${selector} [data-value="days"]`);
+  }
 
-const timer = {
   start() {
-    const targetTime = new Date("Dec 31, 2020");
-
     setInterval(() => {
       const currentTime = Date.now();
+      const delta = this.targetDate - currentTime;
 
-      const delta = targetTime - currentTime;
-
-      updateTime(delta);
+      this.updateTime(delta);
     }, 1000);
-  },
-};
+  }
 
-const updateTime = (time) => {
-  const days = pad(Math.floor(time / (1000 * 60 * 60 * 24)));
-  const hours = pad(
-    Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-  );
-  const mins = pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-  const secs = pad(Math.floor((time % (1000 * 60)) / 1000));
-  updateValues(secs, mins, hours, days);
-};
+  updateTime(time) {
+    const days = this.pad(Math.floor(time / (1000 * 60 * 60 * 24)));
+    const hours = this.pad(
+      Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    );
+    const mins = this.pad(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
+    const secs = this.pad(Math.floor((time % (1000 * 60)) / 1000));
+    this.updateValues(secs, mins, hours, days);
+  }
 
-const updateValues = (secs, mins, hours, days) => {
-  refs.sec.textContent = secs;
-  refs.min.textContent = mins;
-  refs.hour.textContent = hours;
-  refs.day.textContent = days;
-};
+  updateValues(secs, mins, hours, days) {
+    this.sec.textContent = secs;
+    this.min.textContent = mins;
+    this.hour.textContent = hours;
+    this.day.textContent = days;
+  }
 
-const pad = (value) => {
-  return String(value).padStart(2, "0");
-};
+  pad(value) {
+    return String(value).padStart(2, "0");
+  }
+}
 
+const timer = new CountdownTimer("#timer-1", new Date("Dec 31, 2020"));
 timer.start();
