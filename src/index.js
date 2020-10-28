@@ -2,6 +2,7 @@ import css from "./css/style.css";
 
 class CountdownTimer {
   constructor(selector, targetDate) {
+    console.log("creating timer instance");
     this.targetDate = targetDate;
     this.sec = document.querySelector(`${selector} [data-value="secs"]`);
     this.min = document.querySelector(`${selector} [data-value="mins"]`);
